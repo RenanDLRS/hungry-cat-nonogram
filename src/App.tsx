@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   ColorNumber,
   ColorSquare,
@@ -10,89 +10,76 @@ import {
 
 import GlobalStyle from "./styles/global";
 
-const colorAmount = {
-  columns: [
-    [1, 0, 0, 14],
-    [4, 0, 1, 10],
-    [5, 1, 0, 9],
-    [9, 5, 0, 1],
-    [9, 4, 2, 0],
-    [8, 3, 2, 2],
-    [8, 7, 0, 0],
-    [9, 1, 2, 3],
-    [6, 2, 1, 6],
-    [1, 1, 0, 13],
-  ],
-  lines: [
-    [3, 0, 0, 7],
-    [5, 0, 0, 5],
-    [7, 0, 0, 3],
-    [8, 0, 0, 2],
-    [9, 0, 0, 1],
-    [0, 3, 3, 4],
-    [3, 3, 4, 0],
-    [2, 4, 0, 4],
-    [4, 4, 0, 2],
-    [6, 0, 0, 4],
-    [6, 0, 0, 4],
-    [5, 0, 1, 4],
-    [2, 3, 0, 5],
-    [0, 3, 0, 7],
-    [0, 4, 0, 6],
-  ],
-};
+interface IColorCount {
+  columns: number[][];
+  lines: number[][];
+}
 
-const board = {
-  lines: [
-    ["blue", "", "", "", "", "", "", "", "", ""],
-    ["blue", "", "", "", "", "", "", "", "", ""],
-    ["blue", "", "", "", "", "", "", "", "", ""],
-    ["blue", "", "", "", "", "", "", "", "", ""],
-    ["blue", "#222", "#222", "#222", "#222", "#222", "#222", "#222", "#222", "#222"],
-    ["blue", "", "", "", "", "", "", "", "", ""],
-    ["yellow", "", "", "", "", "", "", "", "", ""],
-    ["blue", "", "", "", "", "", "", "", "", ""],
-    ["blue", "", "", "", "", "", "", "", "", ""],
-    ["blue", "", "", "", "", "", "", "", "", ""],
-    ["blue", "", "", "", "", "", "", "", "", ""],
-    ["blue", "", "", "", "", "", "", "", "", ""],
-    ["blue", "", "", "", "", "", "", "", "", ""],
-    ["blue", "", "", "", "", "", "", "", "", ""],
-    ["blue", "", "", "", "", "", "", "", "", ""],
-    ["blue", "", "", "", "", "", "", "", "", ""],
-  ],
-};
+interface IGridSize {
+  columns: number;
+  lines: number;
+}
+
+interface IGameBoard {
+  lines: IBoardLine[];
+}
+interface IBoardLine {
+  line: IBoardCell[];
+}
+interface IBoardCell {
+  color: string;
+}
 
 function App() {
+  const [colorCount, setColorCount] = useState<IColorCount>({
+    columns: [],
+    lines: [],
+  });
+  const [gridSize, setGridSize] = useState<IGridSize>({ columns: 5, lines: 5 });
+  const [gameBoard, setGameBoard] = useState<IGameBoard>({ lines: [] });
+
+  useEffect(() => {
+    let tempGameBoard: IGameBoard = { lines: [] };
+    for (let i = 0; i < gridSize.columns; i++) {
+      let tempBoardLine: IBoardLine = { line: [] };
+      for (let j = 0; j < gridSize.lines; j++) {
+        tempBoardLine.line.push({ color: "red" });
+      }
+      tempGameBoard.lines.push(tempBoardLine);
+      tempBoardLine = { line: [] };
+    }
+    setGameBoard(tempGameBoard);
+  }, [gridSize]);
+
   return (
     <Container>
       <div />
       <div className="flex-row">
-        {colorAmount.columns.map((column) => (
+        {/* {colorAmount.columns.map((column) => (
           <NumberColumn>
             {column.map((number) => (
               <ColorNumber>{number}</ColorNumber>
             ))}
           </NumberColumn>
-        ))}
+        ))} */}
       </div>
       <div
         className="flex-column"
         style={{ justifyContent: "space-between", height: "100%" }}
       >
-        {colorAmount.lines.map((line) => (
+        {/* {colorAmount.lines.map((line) => (
           <NumberLine>
             {line.map((number) => (
               <ColorNumber>{number}</ColorNumber>
             ))}
           </NumberLine>
-        ))}
+        ))} */}
       </div>
       <div>
-        {board.lines.map((line) => (
+        {gameBoard.lines.map((line) => (
           <Line>
-            {line.map((square) => (
-              <ColorSquare color={square} />
+            {line.line.map((cell) => (
+              <ColorSquare color={cell.color} />
             ))}
           </Line>
         ))}
