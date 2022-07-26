@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { fristMap } from "./data";
 import {
   ColorNumber,
   ColorSquare,
@@ -10,28 +11,34 @@ import {
 
 import GlobalStyle from "./styles/global";
 
-interface IColorCount {
-  columns: number[][];
-  lines: number[][];
+export interface IBoardColorCount {
+  columns: IColorCount[][];
+  lines: IColorCount[][];
 }
 
-interface IGridSize {
+export interface IColorCount {
+  count: number;
+  color: string;
+  grouped?: boolean;
+}
+
+export interface IGridSize {
   columns: number;
   lines: number;
 }
 
-interface IGameBoard {
+export interface IGameBoard {
   lines: IBoardLine[];
 }
-interface IBoardLine {
-  line: IBoardCell[];
+export interface IBoardLine {
+  cells: IBoardCell[];
 }
-interface IBoardCell {
+export interface IBoardCell {
   color: string;
 }
 
 function App() {
-  const [colorCount, setColorCount] = useState<IColorCount>({
+  const [boardColorCount, setBoardColorCount] = useState<IBoardColorCount>({
     columns: [],
     lines: [],
   });
@@ -41,44 +48,43 @@ function App() {
   useEffect(() => {
     let tempGameBoard: IGameBoard = { lines: [] };
     for (let i = 0; i < gridSize.columns; i++) {
-      let tempBoardLine: IBoardLine = { line: [] };
+      let tempBoardLine: IBoardLine = { cells: [] };
       for (let j = 0; j < gridSize.lines; j++) {
-        tempBoardLine.line.push({ color: "red" });
+        tempBoardLine.cells.push({ color: "red" });
       }
       tempGameBoard.lines.push(tempBoardLine);
-      tempBoardLine = { line: [] };
+      tempBoardLine = { cells: [] };
     }
     setGameBoard(tempGameBoard);
+
+    setBoardColorCount(fristMap);
   }, [gridSize]);
 
   return (
     <Container>
       <div />
       <div className="flex-row">
-        {/* {colorAmount.columns.map((column) => (
+        {boardColorCount.columns.map((column) => (
           <NumberColumn>
-            {column.map((number) => (
-              <ColorNumber>{number}</ColorNumber>
+            {column.map((colorCount) => (
+              <ColorNumber>{colorCount.count || ""}</ColorNumber>
             ))}
           </NumberColumn>
-        ))} */}
+        ))}
       </div>
-      <div
-        className="flex-column"
-        style={{ justifyContent: "space-between", height: "100%" }}
-      >
-        {/* {colorAmount.lines.map((line) => (
+      <div className="flex-column">
+        {boardColorCount.lines.map((line) => (
           <NumberLine>
-            {line.map((number) => (
-              <ColorNumber>{number}</ColorNumber>
+            {line.map((colorCount) => (
+              <ColorNumber>{colorCount.count || ""}</ColorNumber>
             ))}
           </NumberLine>
-        ))} */}
+        ))}
       </div>
       <div>
         {gameBoard.lines.map((line) => (
           <Line>
-            {line.line.map((cell) => (
+            {line.cells.map((cell) => (
               <ColorSquare color={cell.color} />
             ))}
           </Line>
