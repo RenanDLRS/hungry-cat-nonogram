@@ -10,6 +10,7 @@ import {
 } from "./styles/boardStyles";
 
 import GlobalStyle from "./styles/global";
+import { boardSolver } from "./styles/solveFunciton";
 
 export interface IBoardColorCount {
   columns: IColorCount[][];
@@ -50,7 +51,7 @@ function App() {
     for (let i = 0; i < gridSize.columns; i++) {
       let tempBoardLine: IBoardLine = { cells: [] };
       for (let j = 0; j < gridSize.lines; j++) {
-        tempBoardLine.cells.push({ color: "red" });
+        tempBoardLine.cells.push({ color: "#ddd" });
       }
       tempGameBoard.lines.push(tempBoardLine);
       tempBoardLine = { cells: [] };
@@ -58,7 +59,12 @@ function App() {
     setGameBoard(tempGameBoard);
 
     setBoardColorCount(fristMap);
+
   }, [gridSize]);
+
+  useEffect(() => {
+    boardSolver(boardColorCount, gameBoard);
+  }, [boardColorCount]);
 
   return (
     <Container>
