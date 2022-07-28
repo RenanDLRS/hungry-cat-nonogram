@@ -10,7 +10,7 @@ import {
 } from "./styles/boardStyles";
 
 import GlobalStyle from "./styles/global";
-import { boardSolver } from "./styles/solveFunciton";
+import { isOnlyColorInColumn, isOnlyColorInLine } from "./styles/solveFunciton";
 
 export interface IBoardColorCount {
   columns: IColorCount[][];
@@ -59,10 +59,34 @@ function App() {
     setGameBoard(tempGameBoard);
 
     setBoardColorCount(fristMap);
-
   }, [gridSize]);
 
   useEffect(() => {
+    async function boardSolver(
+      boardColorCount: IBoardColorCount,
+      gameBoard: IGameBoard
+    ) {
+      let tempBoard = gameBoard;
+      for (let i = 0; i < gameBoard.lines.length; i++) {
+        let line = gameBoard.lines[i];
+        for (let j = 0; j < line.cells.length; j++) {
+          let cell = line.cells[j];
+
+          let lineCount = boardColorCount.lines[i];
+          let columnCount = boardColorCount.columns[j];
+
+          let isOnlyColor =
+            isOnlyColorInColumn(columnCount) || isOnlyColorInLine(lineCount);
+          if (isOnlyColor) {
+            cell.color = isOnlyColor.color;
+            tempBoard.lines[i].cells[j].color = isOnlyColor.color;
+            setGameBoard({ ...tempBoard });
+            const sleep = (ms: any) => new Promise((r) => setTimeout(r, ms));
+            await sleep(200);
+          }
+        }
+      }
+    }
     boardSolver(boardColorCount, gameBoard);
   }, [boardColorCount]);
 
