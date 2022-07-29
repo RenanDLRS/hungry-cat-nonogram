@@ -10,7 +10,12 @@ import {
 } from "./styles/boardStyles";
 
 import GlobalStyle from "./styles/global";
-import { isOnlyColorInColumn, isOnlyColorInLine } from "./styles/solveFunciton";
+import {
+  isBiggerThanHalfColumn,
+  isBiggerThanHalfLine,
+  isOnlyColorInColumn,
+  isOnlyColorInLine,
+} from "./styles/solveFunciton";
 
 export interface IBoardColorCount {
   columns: IColorCount[][];
@@ -81,9 +86,18 @@ function App() {
             cell.color = isOnlyColor.color;
             tempBoard.lines[i].cells[j].color = isOnlyColor.color;
             setGameBoard({ ...tempBoard });
-            const sleep = (ms: any) => new Promise((r) => setTimeout(r, ms));
-            await sleep(200);
           }
+
+          let isBiggerThanHal =
+            isBiggerThanHalfLine(lineCount, i) ||
+            isBiggerThanHalfColumn(columnCount, j);
+          if (isBiggerThanHal) {
+            cell.color = isBiggerThanHal.color;
+            tempBoard.lines[i].cells[j].color = isBiggerThanHal.color;
+            setGameBoard({ ...tempBoard });
+          }
+          const sleep = (ms: any) => new Promise((r) => setTimeout(r, ms));
+          await sleep(200);
         }
       }
     }

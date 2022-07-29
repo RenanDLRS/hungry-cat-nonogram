@@ -35,17 +35,48 @@ export function boardSolver(
         cell.color = isOnlyColor.color;
         tempBoard.lines[i].cells[j].color = isOnlyColor.color;
       }
+
+      let isBiggerThanHal =
+        isBiggerThanHalfLine(lineCount, i) ||
+        isBiggerThanHalfColumn(columnCount, j);
+      if (isBiggerThanHal) {
+        cell.color = isBiggerThanHal.color;
+        tempBoard.lines[i].cells[j].color = isBiggerThanHal.color;
+      }
     }
   }
 }
 
 export function isBiggerThanHalfLine(
   colorCount: IColorCount[],
+  index: number,
   gridSize: IGridSize = { columns: 5, lines: 5 }
 ) {
   for (let i = 0; i < colorCount.length; i++) {
-    let halfOfLine = gridSize.lines / 2;
-    if (colorCount[i].grouped && colorCount[i].count > halfOfLine && i) {
+    let halfOfLine = (gridSize.lines - 1) / 2; // 0 based
+    let maxDistance = colorCount[i].count - halfOfLine;
+    let withinMaxDistance = Math.abs(index - halfOfLine) < maxDistance;
+    console.log(halfOfLine, maxDistance, index);
+    console.log(Math.abs(index - halfOfLine) < maxDistance);
+
+    if (colorCount[i].grouped && withinMaxDistance) {
+      return colorCount[i];
+    }
+  }
+  return undefined;
+}
+
+export function isBiggerThanHalfColumn(
+  colorCount: IColorCount[],
+  index: number,
+  gridSize: IGridSize = { columns: 5, lines: 5 }
+) {
+  for (let i = 0; i < colorCount.length; i++) {
+    let halfOfLine = (gridSize.columns - 1) / 2; // 0 based
+    let maxDistance = colorCount[i].count - halfOfLine;
+    let withinMaxDistance = Math.abs(index - halfOfLine) < maxDistance;
+
+    if (colorCount[i].grouped && withinMaxDistance) {
       return colorCount[i];
     }
   }
