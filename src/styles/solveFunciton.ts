@@ -37,8 +37,8 @@ export function boardSolver(
       }
 
       let isBiggerThanHal =
-        isBiggerThanHalfLine(lineCount, i) ||
-        isBiggerThanHalfColumn(columnCount, j);
+        isBiggerThanHalfLine(lineCount, j) || // index of column to lines
+        isBiggerThanHalfColumn(columnCount, i); // index of line to columns
       if (isBiggerThanHal) {
         cell.color = isBiggerThanHal.color;
         tempBoard.lines[i].cells[j].color = isBiggerThanHal.color;
@@ -56,8 +56,12 @@ export function isBiggerThanHalfLine(
     let halfOfLine = (gridSize.lines - 1) / 2; // 0 based
     let maxDistance = colorCount[i].count - halfOfLine;
     let withinMaxDistance = Math.abs(index - halfOfLine) < maxDistance;
-    console.log(halfOfLine, maxDistance, index);
-    console.log(Math.abs(index - halfOfLine) < maxDistance);
+    if (index === 2) {
+      console.log(index);
+      console.log(JSON.stringify(colorCount));
+      console.log(JSON.stringify(colorCount[i]));
+      console.log(halfOfLine, maxDistance, withinMaxDistance);
+    }
 
     if (colorCount[i].grouped && withinMaxDistance) {
       return colorCount[i];

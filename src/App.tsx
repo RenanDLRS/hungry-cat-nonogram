@@ -80,17 +80,17 @@ function App() {
           let lineCount = boardColorCount.lines[i];
           let columnCount = boardColorCount.columns[j];
 
-          let isOnlyColor =
+          /* let isOnlyColor =
             isOnlyColorInColumn(columnCount) || isOnlyColorInLine(lineCount);
           if (isOnlyColor) {
             cell.color = isOnlyColor.color;
             tempBoard.lines[i].cells[j].color = isOnlyColor.color;
             setGameBoard({ ...tempBoard });
-          }
+          } */
 
           let isBiggerThanHal =
-            isBiggerThanHalfLine(lineCount, i) ||
-            isBiggerThanHalfColumn(columnCount, j);
+            isBiggerThanHalfLine(lineCount, j) ||
+            isBiggerThanHalfColumn(columnCount, i);
           if (isBiggerThanHal) {
             cell.color = isBiggerThanHal.color;
             tempBoard.lines[i].cells[j].color = isBiggerThanHal.color;
