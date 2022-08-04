@@ -1,5 +1,3 @@
-import { IBoardColorCount, IColorCount, IGameBoard, IGridSize } from "../App";
-
 // GC = Grouped count
 // SC = Separated count
 // L/C = L/C
@@ -16,6 +14,32 @@ import { IBoardColorCount, IColorCount, IGameBoard, IGridSize } from "../App";
 // 6- reduce count of each confirmed color mentally (temp count reduced)
 // 7- repeat?, 'excluding' known cells
 
+export interface IBoardColorCount {
+  columns: IColorCount[][];
+  lines: IColorCount[][];
+}
+
+export interface IColorCount {
+  count: number;
+  color: string;
+  grouped?: boolean;
+}
+
+export interface IGridSize {
+  columns: number;
+  lines: number;
+}
+
+export interface IGameBoard {
+  lines: IBoardLine[];
+}
+export interface IBoardLine {
+  cells: IBoardCell[];
+}
+export interface IBoardCell {
+  color: string;
+}
+
 export function boardSolver(
   boardColorCount: IBoardColorCount,
   gameBoard: IGameBoard
@@ -29,12 +53,12 @@ export function boardSolver(
       let lineCount = boardColorCount.lines[i];
       let columnCount = boardColorCount.columns[j];
 
-      let isOnlyColor =
+      /* let isOnlyColor =
         isOnlyColorInColumn(columnCount) || isOnlyColorInLine(lineCount);
       if (isOnlyColor) {
         cell.color = isOnlyColor.color;
         tempBoard.lines[i].cells[j].color = isOnlyColor.color;
-      }
+      } */
 
       let isBiggerThanHal =
         isBiggerThanHalfLine(lineCount, j) || // index of column to lines
@@ -87,7 +111,7 @@ export function isBiggerThanHalfColumn(
   return undefined;
 }
 
-export function isOnlyColorInLine(
+/* export function isOnlyColorInLine(
   colorCount: IColorCount[],
   gridSize: IGridSize = { columns: 5, lines: 5 }
 ) {
@@ -110,4 +134,4 @@ export function isOnlyColorInColumn(
     }
   }
   return undefined;
-}
+} */

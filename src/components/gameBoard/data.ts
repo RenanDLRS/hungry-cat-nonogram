@@ -1,4 +1,4 @@
-import { IBoardColorCount } from "./App";
+import { IBoardColorCount } from "../../solverFunciton";
 
 function mountColorCount(count: number, color: string, grouped?: boolean) {
   return { count, color, grouped };
